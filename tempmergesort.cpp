@@ -28,8 +28,7 @@ void merge(T a[], T x[], int  s, int e, int m) {
 		if (a[i] < a[j]) {
 			x[k] = a[i];
 			++i;
-		}
-		else {
+		} else {
 			x[k] = a[j];
 			j++;
 		}
