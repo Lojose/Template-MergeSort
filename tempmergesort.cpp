@@ -1,93 +1,88 @@
-#include <iostream>
-#include <cassert>
-#include <cstdlib> 
+#include "List.h"
 
-using namespace std;
-
-template <class T>  
-void merge(T a[], T x[], int s, int e, int m);
-
-template <class T>
-void msort1(T a[], T x[], int  s, int e) {
-	int m;
-	if (s < e) {
-		m = (s + e) / 2;
-		msort1(a, x, s, m);
-		msort1(a, x, m + 1, e);
-		merge(a, x, s, e, m);
-	}
+List::List () {
+	Listfront = nullptr;
+	Listback = nullptr;  
+	n = 0, x = 0;
+}
+List::~List () {
+}
+ 
+bool List::empty() const {
+	return Listfront == nullptr;
 }
 
-template <class T>
-void merge(T a[], T x[], int  s, int e, int m) {
-	int i, k, j;
-	i = s;
-	k = s;
-	j = m + 1;
-	while (i <= m && j <= e) {
-		if (a[i] < a[j]) {
-			x[k] = a[i];
-			++i;
-		} else {
-			x[k] = a[j];
-			j++;
+void List::push_back (int val) {
+	Link *pt1 = new Link (val);
+	if (empty()) {
+		Listfront = Listback = pt1;
+	} else {
+		for (Link *cur1 = Listfront; cur1 != nullptr; cur1 = cur1->next) {
+			if (cur1 == nullptr) Listback = cur1; 
+			pt1 = Listback; 
 		}
-		k++;
+		Link *update1 = new Link(val); 
+		Listfront->next = update1; 
+		Listfront = update1; 
 	}
-	while (i > m && j <= e) {
-		x[k] = a[j];
-		k++; j++;
-	}
-	while (j > e && i <= m) {
-		x[k] = a[i];
-		++i; ++k;
-	}
-	for (int l = s; l <= e; ++l) {
-		a[l] = x[l];
-	}
+	n++; 
 }
 
-template <class T>
-void mergesort(T a[], int n) {
-	int *x;
-	x = new int[n];
-	msort1(a, x, 0, n - 1);
-	delete[] x;
-}
-
-template <class T>
-bool sorted(T a[], int n) {
-	for (int i = 0; i < n - 1; ++i) {
-		if (a[i + 1] < a[i]) return false;
+void List::push_front(int val) {
+	Link *pt2 = new Link(val); 
+	if (empty ()) {
+		Listback = Listfront = pt2; 
 	}
-	return true;
+	else {
+		for (Link *cur2 = Listfront; cur2 != nullptr; cur2 = cur2->next) {
+			if (cur2 == nullptr) Listfront = cur2; 
+			cur2 = Listfront; 
+		}
+		Link *update2 = new Link(val); 
+		Listback->next = update2; 
+		Listback = update2; 
+	}
+	n++; 
 }
 
-int main(int argc, char * args[]) {
-	int p[] = { 5, 3, 11, 9 };
-	int s[] = { 8, 4, 9, 2, 0 };
-	mergesort(p, 4);
-	mergesort(s, 5);
-
-	int a[1000];
-	for (int i = 0; i < 1000; ++i) a[i] = -50 + rand() % 100;
-	mergesort(a, 1000);
-	assert(sorted(a, 1000));
-
-	int b[1001];
-	for (int i = 0; i < 1001; ++i) b[i] = -50 + rand() % 100;
-	mergesort(b, 1001);
-	assert(sorted(b, 1001));
-
-	int c[] = { 2 };
-	mergesort(c, 1);
-	assert(sorted(c, 1));
-
-	int d[] = { 1, 2, 3, 4, 5 };
-	mergesort(d, 5);
-	assert(sorted(d, 5));
-	assert(sorted(a, 4) == true);
-	assert(sorted(b, 5) == true);
-
-	cout << "All tests passed." << endl;
+void List::prepop_back(int val) {
+		Link *pt3 = new Link(val);
+		Listback->next = pt3;
+		Listback = pt3;
+		delete pt3;
+	
 }
+
+void List::prepop_front(int val) {
+	Link *pt5 = new Link(val);
+	Listfront = pt5; 
+	delete pt5;
+}
+void List::pop_back() {
+	prepop_back(0); 
+	++x; 
+}
+
+void List::pop_front() {
+	prepop_front(0); 
+	++x; 
+
+}
+int List::size() {
+	int l  = n - x; 
+	return l;
+ }
+Iterator List::begin() {
+	return Iterator(Listfront); 
+	//if (link = nullptr) return Iterator(nullptr); 
+}
+
+
+
+
+
+/* cout << a << endl; 
+list<int> a;
+for (list<int>::iterator i = Listback.begin(); i != Listfront.end(); ++i)
+cout << *i << endl
+*/
